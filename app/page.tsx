@@ -1,101 +1,63 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, Search, BarChart2, ShieldCheck } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
+      <main className="flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-8 py-20 lg:py-32 bg-white">
+        <div className="max-w-3xl space-y-8">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-[#0A0A0A] text-balance">
+            Find the right college for your future.
+          </h1>
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-balance">
+            The modern way to discover, compare, and predict your chances at the top engineering, medical, and management institutions in India.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Button size="lg" className="w-full sm:w-auto bg-[#2563EB] hover:bg-[#2563EB]/90 h-12 px-8 text-base" asChild>
+              <Link href="/colleges">
+                Explore Colleges <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 px-8 text-base border-[#E5E7EB]" asChild>
+              <Link href="/predictor">
+                Predict My Rank
+              </Link>
+            </Button>
+          </div>
+        </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        {/* Features Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full mt-32 text-left">
+          <div className="space-y-3 p-6 rounded-2xl border border-secondary bg-secondary/10 hover:bg-secondary/20 transition-colors">
+            <div className="h-10 w-10 rounded-full bg-[#2563EB]/10 flex items-center justify-center text-[#2563EB] mb-4">
+              <Search className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-lg">Smart Search</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Filter by state, courses, and fees to find the perfect match for your requirements.
+            </p>
+          </div>
+          <div className="space-y-3 p-6 rounded-2xl border border-secondary bg-secondary/10 hover:bg-secondary/20 transition-colors">
+            <div className="h-10 w-10 rounded-full bg-[#2563EB]/10 flex items-center justify-center text-[#2563EB] mb-4">
+              <BarChart2 className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-lg">Compare Instantly</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Put up to 3 colleges side-by-side and evaluate their placements, rankings, and reviews.
+            </p>
+          </div>
+          <div className="space-y-3 p-6 rounded-2xl border border-secondary bg-secondary/10 hover:bg-secondary/20 transition-colors">
+            <div className="h-10 w-10 rounded-full bg-[#2563EB]/10 flex items-center justify-center text-[#2563EB] mb-4">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-lg">Rank Predictor</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Use historical cutoff data from JEE, NEET, and CAT to see where you stand.
+            </p>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

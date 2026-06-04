@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model College {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  state         String
+  city          String
+  nirfRank      Int?
+  rating        Float    @default(0)
+  totalReviews  Int      @default(0)
+  website       String?
+  imageUrl      String?
+  type          String   // Government / Private / Deemed
+  courses       Course[]
+  placements    Placement?
+  reviews       Review[]
+  cutoffs       Cutoff[]
+  savedBy       SavedCollege[]
+  createdAt     DateTime @default(now())
+}
+
+model Course {
+  id         String  @id @default(cuid())
+  college    College @relation(fields: [collegeId], references: [id])
+  collegeId  String
+  name       String  // B.Tech CSE, MBA, MBBS
+  duration   String  // 4 years
+  totalFees  Int     // in INR
+  seats      Int?
+}
+
+model Placement {
+  id              String  @id @default(cuid())
+  college         College @relation(fields: [collegeId], references: [id])
+  collegeId       String  @unique
+  avgPackage      Float   // in LPA
+  highestPackage  Float
+  placementRate   Float   // percentage
+  topRecruiters   String  // JSON array stored as string, parse on frontend
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  college    College  @relation(fields: [collegeId], references: [id])
+  collegeId  String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  rating     Int      // 1-5
+  content    String
+  createdAt  DateTime @default(now())
+}
+
+model Cutoff {
+  id        String  @id @default(cuid())
+  college   College @relation(fields: [collegeId], references: [id])
+  collegeId String
+  exam      String  // JEE_MAIN, JEE_ADV, NEET, CAT, GATE
+  category  String  // GENERAL, OBC, SC, ST
+  course    String
+  openRank  Int
+  closeRank Int
+  year      Int
+}
+
+model User {
+  id             String         @id // Supabase Auth UID
+  email          String         @unique
+  name           String?
+  savedColleges  SavedCollege[]
+  reviews        Review[]
+  comparisons    SavedComparison[]
+}
+
+model SavedCollege {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  college   College @relation(fields: [collegeId], references: [id])
+  collegeId String
+  @@unique([userId, collegeId])
+}
+
+model SavedComparison {
+  id         String @id @default(cuid())
+  user       User   @relation(fields: [userId], references: [id])
+  userId     String
+  collegeIds String // comma-separated college IDs
+  label      String?
+  createdAt  DateTime @default(now())
+}
