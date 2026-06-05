@@ -9,6 +9,10 @@ const config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Satoshi", "sans-serif"],
+        heading: ["var(--font-heading)", "sans-serif"],
+      },
       colors: {
         border: "var(--border)",
         input: "var(--input)",

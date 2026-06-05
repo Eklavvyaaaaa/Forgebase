@@ -102,7 +102,14 @@ async function main() {
 
     // Comprehensive Cutoffs for Hardcoded Colleges
     if (hc.isEng) {
-      const exams = ['JEE_MAIN', 'JEE_ADV'];
+      let exams = ['JEE_MAIN', 'JEE_ADV'];
+      
+      // Fix exams for private colleges
+      if (hc.name.includes('BITS')) exams = ['BITSAT'];
+      if (hc.name.includes('Vellore')) exams = ['VITEEE'];
+      if (hc.name.includes('Manipal')) exams = ['MET'];
+      if (hc.name.includes('SRM')) exams = ['SRMJEEE'];
+
       const categories = ['GENERAL', 'OBC', 'SC', 'ST'];
       for (const exam of exams) {
         if (exam === 'JEE_ADV' && !hc.name.includes('IIT')) continue; // Only IITs take JEE ADV

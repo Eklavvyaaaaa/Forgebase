@@ -13,41 +13,46 @@ export async function POST(request: Request) {
 
     const { exam, rank, category } = parsed.data;
 
-    const cutoffs = await prisma.cutoff.findMany({
+    // Dream: Colleges where the closing rank is slightly lower than the user's rank (harder to get in)
+    const dreamCutoffs = await prisma.cutoff.findMany({
       where: {
         exam,
         category,
-        closeRank: { gte: Math.floor(rank * 0.6) } // Fetch up to 40% reach
+        closeRank: { gte: Math.floor(rank * 0.7), lt: rank } // Up to 30% reach
       },
-      include: {
-        college: true
-      },
-      orderBy: {
-        closeRank: 'asc'
-      },
-      take: 100 // Fetch a large pool to categorize
+      include: { college: true },
+      orderBy: { closeRank: 'desc' }, // Closest to the user's rank first
+      take: 6
     });
 
-    const dream: any[] = [];
-    const target: any[] = [];
-    const safe: any[] = [];
-
-    cutoffs.forEach(cutoff => {
-      // A lower numerical rank is better
-      if (rank <= cutoff.openRank) {
-        safe.push({ cutoff, confidence: 'Safe', college: cutoff.college });
-      } else if (rank <= cutoff.closeRank) {
-        target.push({ cutoff, confidence: 'Target', college: cutoff.college });
-      } else {
-        dream.push({ cutoff, confidence: 'Dream', college: cutoff.college });
-      }
+    // Target: Colleges where the closing rank is near or slightly above the user's rank
+    const targetCutoffs = await prisma.cutoff.findMany({
+      where: {
+        exam,
+        category,
+        closeRank: { gte: rank, lt: Math.floor(rank * 1.15) } // Up to 15% safety margin
+      },
+      include: { college: true },
+      orderBy: { closeRank: 'asc' }, // Closest to the user's rank first
+      take: 6
     });
 
-    // Return top 5-6 from each category for a focused UI
+    // Safe: Colleges where the closing rank is significantly higher than the user's rank
+    const safeCutoffs = await prisma.cutoff.findMany({
+      where: {
+        exam,
+        category,
+        closeRank: { gte: Math.floor(rank * 1.15) }
+      },
+      include: { college: true },
+      orderBy: { closeRank: 'asc' },
+      take: 6
+    });
+
     return NextResponse.json({
-      dream: dream.slice(0, 6),
-      target: target.slice(0, 6),
-      safe: safe.slice(0, 6)
+      dream: dreamCutoffs.map(cutoff => ({ cutoff, confidence: 'Dream', college: cutoff.college })),
+      target: targetCutoffs.map(cutoff => ({ cutoff, confidence: 'Target', college: cutoff.college })),
+      safe: safeCutoffs.map(cutoff => ({ cutoff, confidence: 'Safe', college: cutoff.college }))
     });
   } catch (error) {
     console.error('Error in rank predictor:', error);

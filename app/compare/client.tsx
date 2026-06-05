@@ -159,7 +159,7 @@ export function CompareClient() {
               <tr>
                 <td className="p-4 border font-medium bg-secondary/30">Rating</td>
                 {colleges?.map((college: any) => (
-                  <td key={college.id} className="p-4 border font-medium text-[#2563EB]">{college.rating?.toFixed(1) || 'N/A'} / 5.0</td>
+                  <td key={college.id} className="p-4 border font-medium text-primary">{college.rating?.toFixed(1) || 'N/A'} / 5.0</td>
                 ))}
                 {Array.from({ length: 3 - (colleges?.length || 0) }).map((_, i) => <td key={`empty-rating-${i}`} className="p-4 border bg-secondary/5"></td>)}
               </tr>

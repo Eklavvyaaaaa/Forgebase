@@ -205,7 +205,7 @@ export function CollegesClient() {
               <div key={i} className="flex flex-col space-y-3">
                 <Skeleton className="h-[200px] w-full rounded-xl" />
                 <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-full bg-primary" />
                   <Skeleton className="h-4 w-[200px]" />
                 </div>
               </div>
@@ -249,7 +249,7 @@ export function CollegesClient() {
                       </div>
                       
                       {college.courses && college.courses.length > 0 && (
-                        <div className="pt-3 border-t">
+                        <div className="pt-3 border-t border-primary">
                           <p className="text-sm font-medium flex items-center gap-1.5">
                             <GraduationCap className="h-4 w-4 text-muted-foreground" />
                             {college.courses[0].name}
@@ -260,7 +260,7 @@ export function CollegesClient() {
                         </div>
                       )}
 
-                      <Button asChild className="w-full mt-4 group-hover:bg-[#2563EB] group-hover:text-white transition-colors" variant="outline">
+                      <Button asChild className="w-full mt-4 group-hover:bg-primary group-hover:text-white transition-colors" variant="outline">
                         <Link href={`/colleges/${college.slug || college.id}`}>
                           View Details <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>

@@ -97,14 +97,14 @@ export function CollegeDetailClient({ id }: { id: string }) {
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-[#0A0A0A]">{college.name}</h1>
             {college.nirfRank && (
-              <Badge variant="default" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-sm">
+              <Badge variant="default" className="bg-primary hover:bg-primary/90 text-sm">
                 NIRF #{college.nirfRank}
               </Badge>
             )}
           </div>
           <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-4">
             <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" /> {college.city}, {college.state}</span>
-            <span className="flex items-center gap-1.5"><Star className="h-4 w-4 fill-[#2563EB] text-[#2563EB]" /> {college.rating?.toFixed(1) || 'N/A'} ({college.totalReviews} Reviews)</span>
+            <span className="flex items-center gap-1.5"><Star className="h-4 w-4 fill-primary text-primary" /> {college.rating?.toFixed(1) || 'N/A'} ({college.totalReviews} Reviews)</span>
             <span className="uppercase text-xs font-semibold tracking-wider bg-secondary px-2 py-1 rounded">{college.type}</span>
           </div>
         </div>
@@ -113,7 +113,7 @@ export function CollegeDetailClient({ id }: { id: string }) {
             <Bookmark className="h-4 w-4 mr-2" /> Save
           </Button>
           {college.website && (
-            <Button asChild className="bg-[#2563EB] hover:bg-[#2563EB]/90">
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <a href={college.website} target="_blank" rel="noopener noreferrer">
                 <Globe className="h-4 w-4 mr-2" /> Website
               </a>
@@ -124,10 +124,10 @@ export function CollegeDetailClient({ id }: { id: string }) {
 
       <Tabs defaultValue="overview" className="space-y-8">
         <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
-          <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#2563EB] data-[state=active]:shadow-none py-3 px-6">Overview</TabsTrigger>
-          <TabsTrigger value="courses" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#2563EB] data-[state=active]:shadow-none py-3 px-6">Courses & Fees</TabsTrigger>
-          <TabsTrigger value="placements" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#2563EB] data-[state=active]:shadow-none py-3 px-6">Placements</TabsTrigger>
-          <TabsTrigger value="reviews" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#2563EB] data-[state=active]:shadow-none py-3 px-6">Reviews</TabsTrigger>
+          <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none py-3 px-6">Overview</TabsTrigger>
+          <TabsTrigger value="courses" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none py-3 px-6">Courses & Fees</TabsTrigger>
+          <TabsTrigger value="placements" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none py-3 px-6">Placements</TabsTrigger>
+          <TabsTrigger value="reviews" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none py-3 px-6">Reviews</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6 animate-in fade-in-50">
@@ -195,7 +195,7 @@ export function CollegeDetailClient({ id }: { id: string }) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold font-mono text-[#2563EB]">{college.placements.highestPackage} LPA</div>
+                  <div className="text-3xl font-bold font-mono text-primary">{college.placements.highestPackage} LPA</div>
                 </CardContent>
               </Card>
               <Card className="border-[#E5E7EB] shadow-sm">
@@ -239,7 +239,7 @@ export function CollegeDetailClient({ id }: { id: string }) {
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button key={star} onClick={() => setRating(star)} className="focus:outline-none">
-                        <Star className={`h-5 w-5 ${star <= rating ? 'fill-[#2563EB] text-[#2563EB]' : 'text-muted'}`} />
+                        <Star className={`h-5 w-5 ${star <= rating ? 'fill-primary text-primary' : 'text-muted'}`} />
                       </button>
                     ))}
                   </div>
@@ -253,7 +253,7 @@ export function CollegeDetailClient({ id }: { id: string }) {
                 <Button 
                   onClick={() => reviewMutation.mutate({ rating, content: reviewContent })}
                   disabled={reviewMutation.isPending || reviewContent.length < 10}
-                  className="bg-[#2563EB] hover:bg-[#2563EB]/90"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   Submit Review
                 </Button>
@@ -274,14 +274,14 @@ export function CollegeDetailClient({ id }: { id: string }) {
                     <CardHeader className="py-4">
                       <div className="flex items-center justify-between">
                         <div className="font-medium text-sm flex items-center gap-2">
-                          <div className="h-8 w-8 rounded-full bg-[#2563EB]/10 text-[#2563EB] flex items-center justify-center font-bold">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
                             {review.user?.name?.charAt(0) || 'A'}
                           </div>
                           {review.user?.name || 'Anonymous'}
                         </div>
                         <div className="flex items-center gap-1">
                            {[...Array(5)].map((_, i) => (
-                             <Star key={i} className={`h-3 w-3 ${i < review.rating ? 'fill-[#2563EB] text-[#2563EB]' : 'text-muted'}`} />
+                             <Star key={i} className={`h-3 w-3 ${i < review.rating ? 'fill-primary text-primary' : 'text-muted'}`} />
                            ))}
                         </div>
                       </div>

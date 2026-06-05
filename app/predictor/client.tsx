@@ -85,7 +85,13 @@ export function PredictorClient() {
                   <FormItem>
                     <FormLabel>All India Rank (AIR)</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="e.g. 5000" {...field} />
+                      <Input 
+                        type="number" 
+                        placeholder="e.g. 5000" 
+                        {...field}
+                        value={field.value || ''} 
+                        onChange={(e) => field.onChange(e.target.valueAsNumber || 0)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -114,7 +120,7 @@ export function PredictorClient() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full bg-[#2563EB] hover:bg-[#2563EB]/90" disabled={mutation.isPending}>
+              <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={mutation.isPending}>
                 {mutation.isPending ? 'Predicting...' : 'Show Predictions'}
               </Button>
             </form>
@@ -124,9 +130,9 @@ export function PredictorClient() {
 
       {/* Results Area */}
       <div className="lg:col-span-8 space-y-6">
-        {!mutation.hasMutated ? (
+        {mutation.isIdle ? (
           <div className="h-full min-h-[400px] flex flex-col items-center justify-center text-center p-8 border border-dashed rounded-xl bg-secondary/10">
-            <Target className="h-12 w-12 text-muted-foreground mb-4" />
+            <img src="/predictor-empty.png" alt="Ready to predict" className="w-64 h-auto mb-6 object-contain mix-blend-multiply" />
             <h3 className="text-xl font-semibold">Ready to Predict</h3>
             <p className="text-muted-foreground mt-2 max-w-sm">Submit your details on the left to see the colleges you have a chance of getting into.</p>
           </div>
@@ -206,7 +212,7 @@ export function PredictorClient() {
                                   </span>
                                 </div>
                               </div>
-                              <Button variant="outline" asChild className="shrink-0 group-hover:border-[#2563EB] group-hover:text-[#2563EB]">
+                              <Button variant="outline" asChild className="shrink-0 group-hover:border-primary group-hover:text-primary">
                                 <Link href={`/colleges/${college.slug}`}>
                                   View College <ArrowRight className="ml-2 h-4 w-4" />
                                 </Link>
