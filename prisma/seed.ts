@@ -100,12 +100,47 @@ async function main() {
       }
     });
 
-    // Cutoffs
+    // Comprehensive Cutoffs for Hardcoded Colleges
     if (hc.isEng) {
-      const baseRank = hc.nirfRank * 20;
-      await prisma.cutoff.create({
-        data: { collegeId: college.id, exam: 'JEE_MAIN', category: 'GENERAL', course: hc.cName, openRank: baseRank, closeRank: baseRank + 500, year: 2023 }
-      });
+      const exams = ['JEE_MAIN', 'JEE_ADV'];
+      const categories = ['GENERAL', 'OBC', 'SC', 'ST'];
+      for (const exam of exams) {
+        if (exam === 'JEE_ADV' && !hc.name.includes('IIT')) continue; // Only IITs take JEE ADV
+        for (const cat of categories) {
+          let multiplier = 1;
+          if (cat === 'OBC') multiplier = 1.5;
+          if (cat === 'SC') multiplier = 3;
+          if (cat === 'ST') multiplier = 5;
+          
+          let baseRank = hc.nirfRank * 20 * multiplier;
+          if (exam === 'JEE_ADV') baseRank = hc.nirfRank * 10 * multiplier;
+          
+          await prisma.cutoff.create({
+            data: { collegeId: college.id, exam, category: cat, course: hc.cName, openRank: Math.floor(baseRank), closeRank: Math.floor(baseRank + 500 * multiplier), year: 2023 }
+          });
+        }
+      }
+    } else if (hc.isMed) {
+      const categories = ['GENERAL', 'OBC', 'SC', 'ST'];
+      for (const cat of categories) {
+        let multiplier = 1;
+        if (cat === 'OBC') multiplier = 1.2;
+        if (cat === 'SC') multiplier = 2.5;
+        if (cat === 'ST') multiplier = 4;
+        let baseRank = hc.nirfRank * 100 * multiplier;
+        await prisma.cutoff.create({
+          data: { collegeId: college.id, exam: 'NEET', category: cat, course: hc.cName, openRank: Math.floor(baseRank), closeRank: Math.floor(baseRank + 1000 * multiplier), year: 2023 }
+        });
+      }
+    } else if (hc.isMBA) {
+       const categories = ['GENERAL', 'OBC', 'SC', 'ST'];
+      for (const cat of categories) {
+        // Mock rank for CAT (percentile converted to rank roughly)
+        let baseRank = hc.nirfRank * 10;
+        await prisma.cutoff.create({
+          data: { collegeId: college.id, exam: 'CAT', category: cat, course: hc.cName, openRank: Math.floor(baseRank), closeRank: Math.floor(baseRank + 50), year: 2023 }
+        });
+      }
     }
   }
 
@@ -225,6 +260,44 @@ async function main() {
         topRecruiters: JSON.stringify(recruiters),
       }
     });
+
+    // Generate comprehensive mock cutoffs for fetched colleges
+    const categories = ['GENERAL', 'OBC', 'SC', 'ST'];
+    let examName = 'JEE_MAIN';
+    if (isMedical) examName = 'NEET';
+    if (isMBA) examName = 'CAT';
+
+    for (const cat of categories) {
+      let multiplier = 1;
+      if (cat === 'OBC') multiplier = 1.5;
+      if (cat === 'SC') multiplier = 3;
+      if (cat === 'ST') multiplier = 5;
+
+      // Base rank scales heavily by NIRF rank to ensure a wide distribution of cutoffs
+      let baseRank = (collegeData.nirfRank * 250) * multiplier;
+      let spread = 5000 * multiplier;
+      
+      if (isMedical) {
+        baseRank = (collegeData.nirfRank * 150) * multiplier;
+        spread = 2000 * multiplier;
+      }
+      if (isMBA) {
+        baseRank = (collegeData.nirfRank * 50) * multiplier;
+        spread = 500 * multiplier;
+      }
+
+      await prisma.cutoff.create({
+        data: { 
+          collegeId: college.id, 
+          exam: examName, 
+          category: cat, 
+          course: isEng ? 'B.Tech Computer Science' : (isMedical ? 'MBBS' : 'MBA'), 
+          openRank: Math.floor(baseRank), 
+          closeRank: Math.floor(baseRank + spread), 
+          year: 2023 
+        }
+      });
+    }
   }
 
   console.log('Seeding finished.');

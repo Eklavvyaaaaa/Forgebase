@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model College {
@@ -26,6 +25,10 @@ model College {
   cutoffs       Cutoff[]
   savedBy       SavedCollege[]
   createdAt     DateTime @default(now())
+
+  @@index([state])
+  @@index([name])
+  @@index([nirfRank])
 }
 
 model Course {
@@ -36,6 +39,9 @@ model Course {
   duration   String  // 4 years
   totalFees  Int     // in INR
   seats      Int?
+
+  @@index([name])
+  @@index([totalFees])
 }
 
 model Placement {

@@ -7,7 +7,7 @@ export const reviewSchema = z.object({
 
 export const predictorSchema = z.object({
   exam: z.enum(["JEE_MAIN", "JEE_ADV", "NEET", "CAT", "GATE"]),
-  rank: z.number().min(1, "Rank must be a positive number"),
+  rank: z.coerce.number().min(1, "Rank must be a positive number"),
   category: z.enum(["GENERAL", "OBC", "SC", "ST"]),
 });
 

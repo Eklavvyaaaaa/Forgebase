@@ -15,6 +15,19 @@ import { MapPin, GraduationCap, Star, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
+interface CollegeWithCourse {
+  id: string;
+  name: string;
+  slug: string;
+  city: string;
+  state: string;
+  nirfRank: number | null;
+  rating: number;
+  totalReviews: number;
+  type: string;
+  courses?: { name: string; totalFees: number }[];
+}
+
 export function CollegesClient() {
   const router = useRouter();
   const pathname = usePathname();
@@ -200,7 +213,7 @@ export function CollegesClient() {
           </div>
         ) : isError ? (
           <div className="text-center py-12 text-destructive">Error loading colleges.</div>
-        ) : data?.data.length === 0 ? (
+        ) : !data || !data.data || data.data.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-lg font-medium">No colleges found.</p>
             <p className="text-muted-foreground">Try adjusting your filters.</p>
@@ -208,7 +221,7 @@ export function CollegesClient() {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data.data.map((college: any) => (
+              {data?.data?.map((college: CollegeWithCourse) => (
                 <Card key={college.id} className="hover:shadow-md transition-shadow group flex flex-col">
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-start gap-4">
@@ -258,7 +271,7 @@ export function CollegesClient() {
               ))}
             </div>
 
-            {data?.meta.totalPages > 1 && (
+            {data?.meta?.totalPages && data.meta.totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 mt-8">
                 <Button 
                   variant="outline" 
@@ -268,12 +281,16 @@ export function CollegesClient() {
                   Previous
                 </Button>
                 <span className="text-sm text-muted-foreground">
-                  Page {page} of {data.meta.totalPages}
+                  Page {page} of {data?.meta?.totalPages || 1}
                 </span>
                 <Button 
                   variant="outline" 
-                  disabled={page === data.meta.totalPages} 
-                  onClick={() => setPage(p => Math.min(data.meta.totalPages, p + 1))}
+                  disabled={!data?.meta || page === data.meta.totalPages} 
+                  onClick={() => {
+                    if (data?.meta) {
+                      setPage(p => Math.min(data.meta.totalPages, p + 1))
+                    }
+                  }}
                 >
                   Next
                 </Button>

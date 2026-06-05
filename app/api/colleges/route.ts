@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { collegeSearchSchema } from '@/lib/schemas';
 
@@ -16,10 +17,10 @@ export async function GET(request: Request) {
     const limit = 12;
     const skip = (page - 1) * limit;
 
-    const whereClause: any = {};
+    const whereClause: Prisma.CollegeWhereInput = {};
     
     if (q) {
-      whereClause.name = { contains: q, mode: 'insensitive' };
+      whereClause.name = { contains: q };
     }
     if (state) {
       whereClause.state = state;
@@ -27,9 +28,14 @@ export async function GET(request: Request) {
     
     if (course || minFees || maxFees) {
       whereClause.courses = { some: {} };
-      if (course) whereClause.courses.some.name = { contains: course, mode: 'insensitive' };
+      if (course) whereClause.courses.some.name = { contains: course };
       if (minFees !== undefined) whereClause.courses.some.totalFees = { gte: minFees };
-      if (maxFees !== undefined) whereClause.courses.some.totalFees = { ...whereClause.courses.some.totalFees, lte: maxFees };
+      if (maxFees !== undefined) {
+        whereClause.courses.some.totalFees = { 
+          ...(whereClause.courses.some.totalFees as Prisma.IntFilter), 
+          lte: maxFees 
+        };
+      }
     }
 
     const [colleges, total] = await Promise.all([
@@ -54,6 +60,10 @@ export async function GET(request: Request) {
         total,
         page,
         totalPages: Math.ceil(total / limit)
+      }
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300'
       }
     });
   } catch (error) {

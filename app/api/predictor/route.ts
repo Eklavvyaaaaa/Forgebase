@@ -13,23 +13,11 @@ export async function POST(request: Request) {
 
     const { exam, rank, category } = parsed.data;
 
-    // Find cutoffs where the user's rank is less than or equal to the closeRank
-    // We'll consider rank <= closeRank as a match. 
-    // If rank <= openRank, it's a 'Good Match'
-    // If openRank < rank <= closeRank, it's a 'Possible'
-    // If rank is slightly above closeRank (e.g., +10%), it's a 'Reach'
-
-    const reachThreshold = rank * 0.9; // 10% higher rank in competitive terms means numerically lower.
-    // Actually, smaller rank is better.
-    // If userRank = 5000, closeRank = 6000 -> userRank is better (Good Match / Possible)
-    // If userRank = 6500, closeRank = 6000 -> userRank is worse, but close -> Reach.
-    
-    // Let's just fetch all where closeRank >= userRank * 0.8 (fetch up to 20% reach)
     const cutoffs = await prisma.cutoff.findMany({
       where: {
         exam,
         category,
-        closeRank: { gte: Math.floor(rank * 0.8) } // fetch anything where closing rank is higher or slightly lower than user rank
+        closeRank: { gte: Math.floor(rank * 0.6) } // Fetch up to 40% reach
       },
       include: {
         college: true
@@ -37,25 +25,30 @@ export async function POST(request: Request) {
       orderBy: {
         closeRank: 'asc'
       },
-      take: 20
+      take: 100 // Fetch a large pool to categorize
     });
 
-    const results = cutoffs.map(cutoff => {
-      let confidence = 'Reach';
+    const dream: any[] = [];
+    const target: any[] = [];
+    const safe: any[] = [];
+
+    cutoffs.forEach(cutoff => {
+      // A lower numerical rank is better
       if (rank <= cutoff.openRank) {
-        confidence = 'Good Match';
+        safe.push({ cutoff, confidence: 'Safe', college: cutoff.college });
       } else if (rank <= cutoff.closeRank) {
-        confidence = 'Possible';
+        target.push({ cutoff, confidence: 'Target', college: cutoff.college });
+      } else {
+        dream.push({ cutoff, confidence: 'Dream', college: cutoff.college });
       }
-
-      return {
-        cutoff,
-        confidence,
-        college: cutoff.college
-      };
     });
 
-    return NextResponse.json(results);
+    // Return top 5-6 from each category for a focused UI
+    return NextResponse.json({
+      dream: dream.slice(0, 6),
+      target: target.slice(0, 6),
+      safe: safe.slice(0, 6)
+    });
   } catch (error) {
     console.error('Error in rank predictor:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
