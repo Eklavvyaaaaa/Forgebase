@@ -5,7 +5,11 @@ import * as motion from 'framer-motion/client';
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
+    <div className="flex flex-col min-h-[calc(100vh-3.5rem)] relative overflow-hidden">
+      <div 
+        className="absolute inset-0 z-[-1] opacity-100" 
+        style={{ backgroundImage: "url('/math-bg.png')", backgroundSize: '400px', backgroundRepeat: 'repeat' }}
+      />
       <main className="flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-8 py-20 lg:py-32">
         <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-left">
           <motion.div 
@@ -20,15 +24,20 @@ export default function Home() {
             <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed font-medium">
               Explore top engineering, medical, and management institutions in India. Compare placements, analyze cutoffs, and find the perfect fit for your academic journey.
             </p>
-            <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
-              <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground h-12 px-8 text-base shadow-lg transition-all" asChild>
+            <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 flex-wrap">
+              <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground h-12 px-8 text-base shadow-lg transition-all cursor-pointer" asChild>
                 <Link href="/colleges">
                   Explore Colleges <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 px-8 text-base border-gray-200 hover:bg-gray-50 transition-all shadow-sm" asChild>
+              <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 px-8 text-base border-gray-200 hover:bg-gray-50 transition-all shadow-sm cursor-pointer" asChild>
                 <Link href="/predictor">
-                  Predict My Rank
+                  Predict Rank
+                </Link>
+              </Button>
+              <Button size="lg" variant="secondary" className="w-full sm:w-auto h-12 px-8 text-base transition-all shadow-sm cursor-pointer" asChild>
+                <Link href="/discover">
+                  Swipe Discover
                 </Link>
               </Button>
             </div>

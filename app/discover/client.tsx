@@ -63,10 +63,8 @@ export function DiscoverClient() {
 
   const saveMutation = useMutation({
     mutationFn: async (collegeId: string) => {
-      await fetch('/api/user/saved', {
+      await fetch(`/api/colleges/${collegeId}/save`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ collegeId }),
       });
     }
   });

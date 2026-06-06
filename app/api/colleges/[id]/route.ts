@@ -6,7 +6,6 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const isSlug = isNaN(Number(params.id)) && !params.id.includes('-'); // Rough check, but Prisma id is cuid. So slug doesn't look like cuid. Actually, wait. The requirement says /colleges/[slug] for the page. Let's support both slug and ID here.
 
     const college = await prisma.college.findFirst({
       where: {

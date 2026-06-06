@@ -28,11 +28,11 @@ export async function GET(request: Request) {
     
     if (course || minFees || maxFees) {
       whereClause.courses = { some: {} };
-      if (course) whereClause.courses.some.name = { contains: course };
-      if (minFees !== undefined) whereClause.courses.some.totalFees = { gte: minFees };
+      if (course) whereClause.courses!.some!.name = { contains: course };
+      if (minFees !== undefined) whereClause.courses!.some!.totalFees = { gte: minFees };
       if (maxFees !== undefined) {
-        whereClause.courses.some.totalFees = { 
-          ...(whereClause.courses.some.totalFees as Prisma.IntFilter), 
+        whereClause.courses!.some!.totalFees = { 
+          ...(whereClause.courses!.some!.totalFees as Prisma.IntFilter), 
           lte: maxFees 
         };
       }

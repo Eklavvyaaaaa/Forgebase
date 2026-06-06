@@ -119,12 +119,12 @@ export function AnimatedNav({ user }: AnimatedNavProps) {
               initial="closed"
               animate="open"
               exit="closed"
-              variants={menuVariants}
+              variants={menuVariants as any}
               className="fixed inset-0 z-40 bg-gray-950 flex flex-col items-center justify-center"
             >
               <nav className="flex flex-col items-center gap-8">
                 {links.map((link, i) => (
-                  <motion.div key={link.name} custom={i} variants={linkVariants}>
+                  <motion.div key={link.name} custom={i} variants={linkVariants as any}>
                     <Link 
                       href={link.href} 
                       className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-400 hover:text-white transition-colors duration-300"
@@ -137,7 +137,7 @@ export function AnimatedNav({ user }: AnimatedNavProps) {
 
               <motion.div 
                 custom={links.length} 
-                variants={linkVariants}
+                variants={linkVariants as any}
                 className="absolute bottom-12 flex flex-col items-center gap-6"
               >
                 {user ? (

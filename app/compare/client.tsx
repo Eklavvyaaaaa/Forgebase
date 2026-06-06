@@ -75,7 +75,10 @@ export function CompareClient() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={(val) => {
+          setOpen(val);
+          if (!val) setSearchQuery('');
+        }}>
           <PopoverTrigger asChild>
             <Button variant="outline" className="w-[300px] justify-start text-left font-normal" disabled={ids.length >= 3}>
               <Search className="mr-2 h-4 w-4" />

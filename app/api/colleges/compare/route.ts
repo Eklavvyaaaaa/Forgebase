@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     });
 
     // Ensure the returned order matches the requested order if possible, or just return as is
-    const sortedColleges = ids.map(id => colleges.find(c => c.id === id)).filter(Boolean);
+    const sortedColleges = ids.map(id => colleges.find((c: any) => c.id === id)).filter(Boolean);
 
     return NextResponse.json(sortedColleges);
   } catch (error) {

@@ -50,9 +50,9 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
-      dream: dreamCutoffs.map(cutoff => ({ cutoff, confidence: 'Dream', college: cutoff.college })),
-      target: targetCutoffs.map(cutoff => ({ cutoff, confidence: 'Target', college: cutoff.college })),
-      safe: safeCutoffs.map(cutoff => ({ cutoff, confidence: 'Safe', college: cutoff.college }))
+      dream: dreamCutoffs.map((cutoff: any) => ({ cutoff, confidence: 'Dream', college: cutoff.college })),
+      target: targetCutoffs.map((cutoff: any) => ({ cutoff, confidence: 'Target', college: cutoff.college })),
+      safe: safeCutoffs.map((cutoff: any) => ({ cutoff, confidence: 'Safe', college: cutoff.college }))
     });
   } catch (error) {
     console.error('Error in rank predictor:', error);

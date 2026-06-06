@@ -19,7 +19,7 @@ type PredictorFormValues = z.infer<typeof predictorSchema>;
 
 export function PredictorClient() {
   const form = useForm<PredictorFormValues>({
-    resolver: zodResolver(predictorSchema),
+    resolver: zodResolver(predictorSchema) as any,
     defaultValues: {
       exam: 'JEE_MAIN',
       category: 'GENERAL',

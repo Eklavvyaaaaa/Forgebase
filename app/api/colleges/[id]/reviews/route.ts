@@ -65,7 +65,7 @@ export async function POST(
 
     // Update college average rating
     const allReviews = await prisma.review.findMany({ where: { collegeId: params.id } });
-    const newRating = allReviews.reduce((acc, curr) => acc + curr.rating, 0) / allReviews.length;
+    const newRating = allReviews.reduce((acc: number, curr: any) => acc + curr.rating, 0) / allReviews.length;
 
     await prisma.college.update({
       where: { id: params.id },

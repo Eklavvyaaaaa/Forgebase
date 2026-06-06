@@ -41,6 +41,7 @@ export function CollegesClient() {
     Number(searchParams.get('maxFees')) || 5000000
   ]);
   const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const debouncedQ = useDebounce(q, 300);
   const debouncedFees = useDebounce(feesRange, 300);
@@ -108,6 +109,7 @@ export function CollegesClient() {
     setCourse('all');
     setFeesRange([0, 5000000]);
     setPage(1);
+    setIsSheetOpen(false);
     router.push(pathname);
   };
 
@@ -158,6 +160,9 @@ export function CollegesClient() {
       <Button variant="outline" className="w-full" onClick={handleFilterReset}>
         Reset Filters
       </Button>
+      <Button className="w-full md:hidden bg-primary" onClick={() => setIsSheetOpen(false)}>
+        View Results
+      </Button>
     </div>
   );
 
@@ -171,7 +176,7 @@ export function CollegesClient() {
           onChange={(e) => setQ(e.target.value)} 
           className="flex-1"
         />
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="outline">Filters</Button>
           </SheetTrigger>
