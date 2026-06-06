@@ -1,7 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Search, BarChart2, ShieldCheck } from 'lucide-react';
-import * as motion from 'framer-motion/client';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
