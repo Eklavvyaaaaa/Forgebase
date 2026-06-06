@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-async function delay(time) {
+async function delay(time: number) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
 
